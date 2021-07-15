@@ -1,8 +1,11 @@
 package models;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class BashExecute {
@@ -42,9 +45,16 @@ public class BashExecute {
 			String name = scanner.nextLine();
 			System.out.println("Ingrese ip");
 			String ip = scanner.nextLine();
-			String conn = "ssh "+name+"@"+ip+" 'bash -s' < conditional.sh";
+			System.out.println("Contraseña");
+			String password = scanner.nextLine();
+			String conn = "sshpass -p "+password+" ssh "+name+"@"+ip+"bash -s < conditional.sh ";
 			process = Runtime.getRuntime().exec(conn);
-		
+			System.out.println(process.toString());
+			InputStream inputstream = process.getInputStream();
+			BufferedInputStream bufferedinputstream = new BufferedInputStream(inputstream);
+			BufferedReader r = new BufferedReader(
+			        new InputStreamReader(bufferedinputstream, StandardCharsets.UTF_8));
+			System.out.println(r.readLine());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
